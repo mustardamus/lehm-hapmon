@@ -15,6 +15,10 @@ such as:
 Check out the [development environment documentation](docs/server.md) for kewl
 tech used, descriptions and commands.
 
+Please note that currently you are not able to create a stand-alone project
+(a API server, for example) with this template. First generate your project
+with the [lehm-bulvue template](https://github.com/mustardamus/lehm-bulvue) and
+then extend it with this template. WIP.
 
 ## Installation
 

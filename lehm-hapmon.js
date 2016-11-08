@@ -7,29 +7,37 @@ module.exports = {
   ignore: ['README.md', 'package.json'],
 
   after: function (srcPath, distPath, variables, utils) {
-    /*
+    let yesNo = (question) => {
+      return [{
+        type: 'list',
+        name: 'answer',
+        message: question,
+        choices: ['yes', 'no']
+      }]
+    }
     let pkgPath = distPath + '/package.json'
     let oldPkg = require(pkgPath)
     let extPkg = require(srcPath + '/package.json')
 
     utils._.assign(oldPkg.config, extPkg.config)
     utils._.assign(oldPkg.scripts, extPkg.scripts)
-    oldPkg.scripts['client:copy'] += ' & npm run client:copy:fonts'
+    utils._.assign(oldPkg.dependencies, extPkg.dependencies)
 
     console.log(utils.Chalk.yellow('Extending package.json...'))
     utils.Fs.writeFileSync(pkgPath, JSON.stringify(oldPkg, null, 2), 'utf8')
 
-    console.log(utils.Chalk.yellow('Installing Font-Awesome...'))
-    utils.Shell.exec('npm install font-awesome --save')
+    let gitignorePath = distPath + '/.gitignore'
+    let gitignoreContent = utils.Fs.readFileSync(gitignorePath, 'utf8')
+    gitignoreContent += '\nserver/config/database.js\n'
 
-    let stylePath = distPath + '/client/index.styl'
-    let styleContent = utils.Fs.readFileSync(stylePath, 'utf8')
-    styleContent += '\n@import "../node_modules/font-awesome/css/font-awesome.css"\n'
+    console.log(utils.Chalk.yellow('Extending .gitignore...'))
+    utils.Fs.writeFileSync(gitignorePath, gitignoreContent, 'utf8')
 
-    console.log(utils.Chalk.yellow('Extending client/index.styl...'))
-    utils.Fs.writeFileSync(stylePath, styleContent, 'utf8')
-    */
-
-    // add "server/config/database.js" to .gitignore
+    utils.Inquirer.prompt(yesNo('Install dependencies?')).then((the) => {
+      if (the.answer === 'yes') {
+        console.log(utils.Chalk.yellow('This takes a while...'))
+        utils.Shell.exec('npm install')
+      }
+    })
   }
 }
